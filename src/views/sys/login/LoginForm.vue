@@ -78,7 +78,7 @@
     </div>
   </Form>
   <!-- 第三方登录相关弹框 -->
-  <ThirdModal ref="thirdModalRef"></ThirdModal>
+  <ThirdModal ref="thirdModalRef" />
 </template>
 <script lang="ts" setup>
   import { reactive, ref, toRaw, unref, computed, onMounted } from 'vue';
@@ -101,7 +101,7 @@
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
   const IconFont = createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_2316098_umqusozousr.js',
+    scriptUrl: '/font_2316098_umqusozousr.js',
   });
   const { t } = useI18n();
   const { notification, createErrorModal } = useMessage();

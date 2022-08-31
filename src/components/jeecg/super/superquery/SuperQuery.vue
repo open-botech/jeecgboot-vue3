@@ -65,13 +65,13 @@
                   :dropdown-style="{ maxHeight: '180px', overflow: 'auto' }"
                   @change="handleChangeField(item)"
                   :tree-data="fieldTreeData"
-                >
-                </a-tree-select>
+                />
               </a-form-item>
               <a-form-item :name="['values', index, 'rule']" style="width: 180px">
                 <a-select style="width: 100%" placeholder="请选择匹配规则" v-model:value="item.rule">
                   <a-select-option value="eq">等于</a-select-option>
                   <a-select-option value="like">模糊</a-select-option>
+                  <a-select-option value="like">全文检索</a-select-option>
                   <a-select-option value="right_like">以..开始</a-select-option>
                   <a-select-option value="left_like">以..结尾</a-select-option>
                   <a-select-option value="in">在...中</a-select-option>
@@ -133,7 +133,7 @@
   <!-- 保存信息弹框 -->
   <a-modal title="请输入保存的名称" :visible="saveInfo.visible" @cancel="saveInfo.visible = false" @ok="doSaveQueryInfo">
     <div style="height: 80px; line-height: 75px; width: 100%; text-align: center">
-      <a-input v-model:value="saveInfo.title" style="width: 90%" placeholder="请输入保存的名称"></a-input>
+      <a-input v-model:value="saveInfo.title" style="width: 90%" placeholder="请输入保存的名称" />
     </div>
   </a-modal>
 </template>
@@ -149,16 +149,6 @@
 
   export default {
     name: 'OnlineSuperQuery',
-    props: {
-      config: {
-        type: Object,
-        default: [],
-      },
-      status: {
-        type: Boolean,
-        default: false,
-      },
-    },
     components: {
       BasicModal,
       MinusCircleOutlined,
@@ -168,6 +158,16 @@
       CloseCircleOutlined,
       AppstoreTwoTone,
       Divider,
+    },
+    props: {
+      config: {
+        type: Object,
+        default: [],
+      },
+      status: {
+        type: Boolean,
+        default: false,
+      },
     },
     emits: ['search'],
     setup(props, { emit }) {

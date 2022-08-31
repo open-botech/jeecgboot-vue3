@@ -110,7 +110,7 @@ export function useSuperQuery() {
    * @param json
    */
   function init(json) {
-    let { allFields, treeData } = getAllFields(json);
+    const { allFields, treeData } = getAllFields(json);
     fieldProperties.value = allFields;
     fieldTreeData.value = treeData;
   }
@@ -120,7 +120,7 @@ export function useSuperQuery() {
    * @param index
    */
   function addOne(index) {
-    let item = {
+    const item = {
       field: undefined,
       rule: 'eq',
       val: '',
@@ -145,7 +145,7 @@ export function useSuperQuery() {
    * 左侧查询项 删除一行
    */
   function removeOne(item: SuperQueryItem) {
-    let arr = toRaw(dynamicRowValues.values);
+    const arr = toRaw(dynamicRowValues.values);
     let index = -1;
     for (let i = 0; i < arr.length; i++) {
       if (item.key == arr[i].key) {
@@ -171,8 +171,8 @@ export function useSuperQuery() {
    * @param index
    */
   function getSchema(item, index) {
-    let map = fieldProperties.value;
-    let prop = map[item.field];
+    const map = fieldProperties.value;
+    const prop = map[item.field];
     if (!prop) {
       return defaultInput;
     }
@@ -190,7 +190,7 @@ export function useSuperQuery() {
       item['val'] = values[item.field];
     };
     temp.setFunctionForFieldValue(setFieldValue);
-    let schema = temp.getFormItemSchema();
+    const schema = temp.getFormItemSchema();
     //schema['valueField'] = 'val'
     return schema;
   }
@@ -230,10 +230,10 @@ export function useSuperQuery() {
   watch(
     () => currentPageSavedArray.value,
     (val) => {
-      let temp: any[] = [];
+      const temp: any[] = [];
       if (val && val.length > 0) {
         val.map((item) => {
-          let key = randomString(16);
+          const key = randomString(16);
           temp.push({
             title: item.title,
             slots: { icon: 'custom' },
@@ -248,9 +248,9 @@ export function useSuperQuery() {
 
   // 重新获取保存的查询信息
   function initSaveQueryInfoCode() {
-    let code = SAVE_CODE_PRE + route.fullPath;
+    const code = SAVE_CODE_PRE + route.fullPath;
     saveInfo.saveCode = code;
-    let list = $ls.get(code);
+    const list = $ls.get(code);
     if (list && list instanceof Array) {
       currentPageSavedArray.value = list;
     }
@@ -264,12 +264,12 @@ export function useSuperQuery() {
    */
   function handleSave() {
     // 获取实际数据转成字符串
-    let fieldArray = getQueryInfo();
+    const fieldArray = getQueryInfo();
     if (!fieldArray) {
       $message.warning('空条件不能保存');
       return;
     }
-    let content = JSON.stringify(fieldArray);
+    const content = JSON.stringify(fieldArray);
     openSaveInfoModal(content);
   }
 
@@ -284,8 +284,8 @@ export function useSuperQuery() {
    * 确认保存查询信息
    */
   function doSaveQueryInfo() {
-    let { title, content, saveCode } = saveInfo;
-    let index = getTitleIndex(title);
+    const { title, content, saveCode } = saveInfo;
+    const index = getTitleIndex(title);
     if (index >= 0) {
       // 已存在是否覆盖
       Modal.confirm({
@@ -316,7 +316,7 @@ export function useSuperQuery() {
 
   // 根据填入的 title找本地存储的信息，如果有需要询问是否覆盖
   function getTitleIndex(title) {
-    let savedArray = currentPageSavedArray.value;
+    const savedArray = currentPageSavedArray.value;
     let index = -1;
     for (let i = 0; i < savedArray.length; i++) {
       if (savedArray[i].title == title) {
@@ -331,27 +331,27 @@ export function useSuperQuery() {
    * 获取左侧所有查询条件，如果没有/或者条件无效则返回false
    */
   function getQueryInfo(isEmit = false) {
-    let arr = dynamicRowValues.values;
+    const arr = dynamicRowValues.values;
     if (!arr || arr.length == 0) {
       return false;
     }
-    let fieldArray: any = [];
-    let fieldProps = fieldProperties.value;
-    for (let item of arr) {
+    const fieldArray: any = [];
+    const fieldProps = fieldProperties.value;
+    for (const item of arr) {
       if (item.field && (item.val || item.val === 0) && item.rule) {
         let tempVal: any = toRaw(item.val);
         if (tempVal instanceof Array) {
           tempVal = tempVal.join(',');
         }
-        let fieldName = getRealFieldName(item);
-        let obj = {
+        const fieldName = getRealFieldName(item);
+        const obj = {
           field: fieldName,
           rule: item.rule,
           val: tempVal,
         };
         if (isEmit === true) {
           //如果当前数据用于emit事件，需要设置dbtype和type
-          let prop = fieldProps[item.field];
+          const prop = fieldProps[item.field];
           if (prop) {
             obj['type'] = prop.view;
             obj['dbType'] = prop.type;
@@ -388,14 +388,14 @@ export function useSuperQuery() {
    */
   function handleTreeSelect(key, { node }) {
     console.log(key, node);
-    let title = node.dataRef.title;
-    let arr = currentPageSavedArray.value.filter((item) => item.title == title);
+    const title = node.dataRef.title;
+    const arr = currentPageSavedArray.value.filter((item) => item.title == title);
     if (arr && arr.length > 0) {
       // 拿到数据渲染
-      let { content, type } = arr[0];
-      let data = JSON.parse(content);
-      let rowsValues: SuperQueryItem[] = [];
-      for (let item of data) {
+      const { content, type } = arr[0];
+      const data = JSON.parse(content);
+      const rowsValues: SuperQueryItem[] = [];
+      for (const item of data) {
         rowsValues.push(Object.assign({}, { key: randomString(16) }, item));
       }
       dynamicRowValues.values = rowsValues;
@@ -408,7 +408,7 @@ export function useSuperQuery() {
    */
   function handleRemoveSaveInfo(title) {
     console.log(title);
-    let index = getTitleIndex(title);
+    const index = getTitleIndex(title);
     if (index >= 0) {
       currentPageSavedArray.value.splice(index, 1);
       $ls.set(saveInfo.saveCode, currentPageSavedArray.value);
@@ -421,9 +421,9 @@ export function useSuperQuery() {
   function getAllFields(properties) {
     // 获取所有配置 查询字段 是否联合查询
     // const {properties, table, title } = json;
-    let allFields = {};
+    const allFields = {};
     let order = 1;
-    let treeData: TreeModel[] = [];
+    const treeData: TreeModel[] = [];
     /*   let mainNode:TreeModel = {
       title,
       value: table,
@@ -432,13 +432,13 @@ export function useSuperQuery() {
     };*/
     //treeData.push(mainNode)
     Object.keys(properties).map((field) => {
-      let item = properties[field];
+      const item = properties[field];
       if (item.view == 'table') {
         // 子表字段
         // 联合查询开启才需要子表字段作为查询条件
-        let subProps = item['properties'] || item['fields'];
-        let subTableOrder = order * 100;
-        let subNode: TreeModel = {
+        const subProps = item['properties'] || item['fields'];
+        const subTableOrder = order * 100;
+        const subNode: TreeModel = {
           title: item.title,
           value: field,
           disabled: true,
@@ -446,10 +446,10 @@ export function useSuperQuery() {
           order: subTableOrder,
         };
         Object.keys(subProps).map((subField) => {
-          let subItem = subProps[subField];
+          const subItem = subProps[subField];
           // 保证排序统一
           subItem['order'] = subTableOrder + subItem['order'];
-          let subFieldKey = field + '@' + subField;
+          const subFieldKey = field + '@' + subField;
           allFields[subFieldKey] = subItem;
           subNode.children!.push({
             title: subItem.title,
@@ -464,7 +464,7 @@ export function useSuperQuery() {
       } else {
         // 主表字段
         //let fieldKey = table+'@'+field
-        let fieldKey = field;
+        const fieldKey = field;
         allFields[fieldKey] = item;
         treeData.push({
           title: item.title,
@@ -480,7 +480,7 @@ export function useSuperQuery() {
 
   //根据字段的order重新排序
   function orderField(data) {
-    let arr = data.children || data;
+    const arr = data.children || data;
     arr.sort(function (a, b) {
       return a.order - b.order;
     });
@@ -489,8 +489,8 @@ export function useSuperQuery() {
   function initDefaultValues(values) {
     const { params, matchType } = values;
     if (params) {
-      let rowsValues: SuperQueryItem[] = [];
-      for (let item of params) {
+      const rowsValues: SuperQueryItem[] = [];
+      for (const item of params) {
         rowsValues.push(Object.assign({}, { key: randomString(16) }, item));
       }
       dynamicRowValues.values = rowsValues;
